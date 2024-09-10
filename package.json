@@ -13,11 +13,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "deploy:docs": "cd apps/docs && pnpm run pages:build && wrangler pages deploy --config wrangler.toml",
-    "deploy:landing": "cd apps/landing && pnpm run pages:build && wrangler pages deploy --config wrangler.toml",
-    "deploy:project": "cd apps/project && pnpm run pages:build && wrangler pages deploy --config wrangler.toml",
-    "deploy:all": "pnpm turbo run deploy --filter=docs --filter=landing --filter=project"
-  },
+    "deploy:docs": "cd apps/docs && pnpm run pages:build && wrangler pages deploy ",
+    "deploy:landing": "cd apps/landing && pnpm run pages:build && wrangler pages deploy ",
+    "deploy:project": "cd apps/project && pnpm run pages:build && wrangler pages deploy ",
+    "deploy:all": "pnpm turbo run deploy --filter=docs --filter=landing --filter=project"  },
   "dependencies": {},
   "devDependencies": {
     "prettier": "^3.2.5",
