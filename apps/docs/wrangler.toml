@@ -1,4 +1,8 @@
-name = "my-app"
-compatibility_date = "2024-07-29"
-compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = ".vercel/output/static"
+name = "nextjs-ssr-app"
+type = "javascript"  # Set the type for serverless JavaScript
+
+# Point to the main SSR server file in standalone output
+main = ".next/standalone/server.js"
+
+[site]
+bucket = ".next/static"
