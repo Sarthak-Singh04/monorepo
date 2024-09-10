@@ -1,5 +1,8 @@
-name = "your-docs-app"
-main = ".vercel/output/static/_worker.js/index.js"
+name = "nextjs-ssr-app"
+type = "javascript"  # Set the type for serverless JavaScript
+
+# Point to the main SSR server file in standalone output
+main = ".next/standalone/server.js"
 
 [site]
-bucket = ".vercel/output/static"
+bucket = ".next/static"
