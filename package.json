@@ -1,0 +1,31 @@
+{
+  "name": "monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "clean": "turbo run clean",
+    "dev": "turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "deploy:docs": "cd apps/docs && pnpm run pages:build && wrangler pages deploy --config wrangler.toml",
+    "deploy:landing": "cd apps/landing && pnpm run pages:build && wrangler pages deploy --config wrangler.toml",
+    "deploy:project": "cd apps/project && pnpm run pages:build && wrangler pages deploy --config wrangler.toml",
+    "deploy:all": "pnpm turbo run deploy --filter=docs --filter=landing --filter=project"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "turbo": "^2.0.3"
+  },
+  "packageManager": "pnpm@9.6.0", 
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=7.0.0"
+  }
+}
