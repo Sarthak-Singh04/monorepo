@@ -20,6 +20,10 @@
     },
     "clean": {
       "cache": false
+    },
+    "pages:build": {
+      "dependsOn": ["build"],
+      "outputs": []
     }
   }
 }

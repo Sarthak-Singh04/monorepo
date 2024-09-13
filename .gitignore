@@ -13,6 +13,7 @@ coverage
 out/
 build
 .vercel/
+.wrangler/
 
 # other
 dist/
