@@ -1,0 +1,30 @@
+# Base image
+FROM node:18-alpine AS base
+RUN apk add --no-cache libc6-compat bash
+
+# Development stage
+FROM base AS dev
+WORKDIR /app
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Set up pnpm global bin directory
+ENV PNPM_HOME=/root/.local/share/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+
+# Copy only the necessary files from the root for pnpm to work properly
+COPY pnpm-workspace.yaml  pnpm-lock.yaml turbo.json package.json ./
+
+
+# Copy only the dashboard app and its dependencies
+COPY apps/project ./apps/project/
+COPY packages ./packages
+
+# Install only dashboard-specific dependencies using pnpm filter
+RUN pnpm install
+
+# Expose the port for the Next.js app
+EXPOSE 3000
+
+CMD [ "pnpm", "turbo", "dev", "--filter=project" ]

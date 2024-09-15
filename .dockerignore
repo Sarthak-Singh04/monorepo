@@ -1,18 +1,61 @@
-node_modules
-.dockerignore
+# Exclude node_modules directories at any level
+**/node_modules
 
-# Not needed as we are bundling the whole app
-node_modules
-# Log files
+# Exclude build artifacts
+**/dist
+**/.next
+**/build
+
+# Exclude Git metadata and related files
+.git
+.gitignore
+
+# Exclude Docker-related files to prevent them from being copied
+Dockerfile*
+docker-compose*
+compose*
+
+# Exclude environment variable files
+.env
+**/.env
+
+# Exclude log files
 logs
 *.log
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.next
-.git
-.git
-.gitignore
+
+# Exclude IDE and editor configuration directories and files
+.vscode
+.vs
+**/.vscode
+**/.vs
+**/.cache
+
+# Exclude specific config files
+**/.classpath
+**/.toolstarget
+**/.prettierrc
+**/.eslintrc.js
+
+# Exclude database and project user files
+**/*.dbmdl
+**/*.*proj.user
+
+# Exclude Helm charts or Kubernetes manifests if not needed
+**/charts
+
+# Exclude any other temporary or unnecessary files
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml
+
+# Exclude documentation and markdown files
 *.md
-dist
+
+# Optional: Exclude any other files or directories you deem unnecessary
+# For example, temporary files created by editors
+**/*~ 
+**/.DS_Store

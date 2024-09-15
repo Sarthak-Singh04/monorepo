@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "lint": "eslint . --max-warnings 0"
+    "lint": "eslint . --max-warnings 0",
+    "ui": "dotenv -e .env pnpm dlx shadcn@latest"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -18,9 +19,11 @@
     "postcss": "^8.4.41",
     "react": "^18.3.1",
     "tailwindcss": "^3.4.10",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "dotenv-cli": "^7.4.2"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

@@ -9,20 +9,18 @@
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
-    "dev": "turbo run dev",
+   "dev": "dotenv -e .env turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "deploy:docs": "cd apps/docs && pnpm run pages:build && wrangler pages deploy ",
-    "deploy:landing": "cd apps/landing && pnpm run pages:build && wrangler pages deploy ",
-    "deploy:project": "cd apps/project && pnpm run pages:build && wrangler pages deploy ",
-    "deploy:all": "pnpm turbo run deploy --filter=docs --filter=landing --filter=project"  },
-  "dependencies": {},
+    "ui": "pnpm --filter ui ui"
+  },
   "devDependencies": {
+    "dotenv-cli": "^7.4.2",
     "prettier": "^3.2.5",
     "turbo": "^2.0.3"
   },
-  "packageManager": "pnpm@9.6.0", 
+  "packageManager": "pnpm@9.6.0",
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=7.0.0"

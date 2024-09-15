@@ -1,21 +1,194 @@
-version: "3"
+version: "3.3"
 
 services:
-  web:
-    container_name: docs
+
+  traefik:
+    image: "traefik:v3.1"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Traefik Web UI
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - proxy_network  # Now using the proxy network
+
+  # Template for Application Services
+  # Repeat this block for each service: docs, landing, chatbot, home, dashboard, map, project
+
+  docs:
     build:
       context: .
       dockerfile: ./apps/docs/Dockerfile.dev
-
+    container_name: "docs"
     restart: always
+    depends_on:
+      - traefik
     ports:
-      - "3000:3000"
+      - "3001:3000"
+    volumes:
+      - .:/app                  # Mount the entire monorepo
+      - /app/node_modules       # Anonymous volume for node_modules
+    environment:
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST:-http://localhost:4000}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://openpolitica.localhost}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.docs.rule=Host(`openpolitica.localhost`) && PathPrefix(`/docs`)"
+      - "traefik.http.routers.docs.entrypoints=web"
+      - "traefik.http.services.docs.loadbalancer.server.port=3000"
+    networks:
+      - proxy_network  # Now using the proxy network
+
+  landing:
+    build:
+      context: .
+      dockerfile: ./apps/landing/Dockerfile.dev
+    container_name: "landing"
+    restart: always
+    depends_on:
+      - traefik
+    ports:
+      - "5370:3000"
     volumes:
       - .:/app
-
+      - /app/node_modules
+    environment:
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST:-http://localhost:4000}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://openpolitica.localhost}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.landing.rule=Host(`openpolitica.localhost`)"
+      - "traefik.http.routers.landing.entrypoints=web"
+      - "traefik.http.services.landing.loadbalancer.server.port=3000"
     networks:
-      - app_network
+      - proxy_network
+
+  chatbot:
+    build:
+      context: .
+      dockerfile: ./apps/chatbot/Dockerfile.dev
+    container_name: "chatbot"
+    restart: always
+    depends_on:
+      - traefik
+    ports:
+      - "3002:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST:-http://localhost:4000}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://openpolitica.localhost}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.chatbot.rule=Host(`openpolitica.localhost`) && PathPrefix(`/c`)"
+      - "traefik.http.routers.chatbot.entrypoints=web"
+      - "traefik.http.services.chatbot.loadbalancer.server.port=3000"
+    networks:
+      - proxy_network
+
+  home:
+    build:
+      context: .
+      dockerfile: ./apps/home/Dockerfile.dev
+    container_name: "home"
+    restart: always
+    depends_on:
+      - traefik
+    ports:
+      - "3003:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST:-http://localhost:4000}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://openpolitica.localhost}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.home.rule=Host(`openpolitica.localhost`) && PathPrefix(`/home`)"
+      - "traefik.http.routers.home.entrypoints=web"
+      - "traefik.http.services.home.loadbalancer.server.port=3000"
+    networks:
+      - proxy_network
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: ./apps/dashboard/Dockerfile.dev
+    container_name: "dashboard"
+    restart: always
+    depends_on:
+      - traefik
+    ports:
+      - "3004:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST:-http://localhost:4000}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://openpolitica.localhost}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`openpolitica.localhost`) && PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+      - "traefik.http.services.dashboard.loadbalancer.server.port=3000"
+    networks:
+      - proxy_network
+
+  map:
+    build:
+      context: .
+      dockerfile: ./apps/map/Dockerfile.dev
+    container_name: "map"
+    restart: always
+    depends_on:
+      - traefik
+    ports:
+      - "3005:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST:-http://localhost:4000}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://openpolitica.localhost}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.map.rule=Host(`openpolitica.localhost`) && PathPrefix(`/map`)"
+      - "traefik.http.routers.map.entrypoints=web"
+      - "traefik.http.services.map.loadbalancer.server.port=3000"
+    networks:
+      - proxy_network
+
+  project:
+    build:
+      context: .
+      dockerfile: ./apps/project/Dockerfile.dev
+    container_name: "project"
+    restart: always
+    depends_on:
+      - traefik
+    ports:
+      - "3006:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST:-http://localhost:4000}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://openpolitica.localhost}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.project.rule=Host(`openpolitica.localhost`) && PathPrefix(`/projects`)"
+      - "traefik.http.routers.project.entrypoints=web"
+      - "traefik.http.services.project.loadbalancer.server.port=3000"
+    networks:
+      - proxy_network
 
 networks:
-  app_network:
-    external: true
+  proxy_network:
+    driver: bridge  # All services use this network
